@@ -9,33 +9,43 @@ export const Chat = () => {
   const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
-    const newSocket = io(endpoint);
-    setSocket(newSocket);
-    newSocket.on("connection", () => {
+    const socket = io(endpoint);
+    setSocket(socket);
+    socket.on("connection", () => {
       console.log("connect");
     });
 
-    newSocket.on("disconnect", () => {
-      console.log("disconnect");
-    });
+    socket.emit("join", { email: "sdh230306@sdh.hs.kr" });
 
     return () => {
-      newSocket.disconnect();
+      socket.disconnect();
     };
   }, []);
-
   useEffect(() => {
     if (socket) {
-      socket.on("message", (msg: string) => {
+      const handleMessage = (msg: string) => {
         setMessages((prevMessages) => [...prevMessages, msg]);
-      });
+        console.log("data");
+      };
+
+      socket.on("message", handleMessage);
+
+      return () => {
+        socket.off("message", handleMessage);
+      };
     }
   }, [socket]);
 
   const sendMessage = () => {
     if (message.trim() !== "" && socket) {
-      // socket.emit('message', {id: })
+      socket.emit("message", {
+        email: "sdh230306@sdh.hs.kr",
+        roomId: 2,
+        message: message,
+      });
     }
+
+    setMessage("");
   };
 
   return (
