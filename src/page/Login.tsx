@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 
 interface IFormData {
   name: string;
+  email: string;
 }
 
 export const Login = () => {
@@ -51,6 +52,14 @@ export const Login = () => {
             fullWidth
             helperText={errors.name?.message}
             error={!!errors.name?.message}
+          />
+          <TextField
+            label="이메일"
+            placeholder="이메일을 입력해주세요"
+            {...register("email")}
+            fullWidth
+            helperText={errors.email?.message}
+            error={!!errors.email?.message}
           />
           <Button
             type="submit"
