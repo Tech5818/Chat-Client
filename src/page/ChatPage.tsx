@@ -3,7 +3,7 @@ import { Socket, io } from "socket.io-client";
 import styled from "styled-components";
 
 const endpoint = "http://localhost:8000";
-export const Chat = () => {
+export const ChatPage = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
@@ -37,6 +37,7 @@ export const Chat = () => {
   }, [socket]);
 
   const sendMessage = () => {
+    setMessages((prevMessages) => [...prevMessages, message]);
     if (message.trim() !== "" && socket) {
       socket.emit("message", {
         email: "sdh230306@sdh.hs.kr",

@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import { Header } from "./components/header/Header";
-import { Home } from "./page/Home";
-import { Chat } from "./page/Chat";
-import { Login } from "./page/Login";
+import { HomePage } from "./page/HomePage";
+import { ChatPage } from "./page/ChatPage";
+import { LoginPage } from "./page/LoginPage";
 import styled from "styled-components";
 
 function App() {
@@ -11,9 +11,9 @@ function App() {
       <Container>
         <Header />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </Container>
     </>

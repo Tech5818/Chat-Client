@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Home = () => {
+export const HomePage = () => {
   return (
     <>
       <Container></Container>
