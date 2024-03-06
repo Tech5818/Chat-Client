@@ -4,6 +4,7 @@ import { HomePage } from "./page/HomePage";
 import { ChatPage } from "./page/ChatPage";
 import { LoginPage } from "./page/LoginPage";
 import styled from "styled-components";
+import { RegisterPage } from "./page/RegisterPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </Container>
     </>

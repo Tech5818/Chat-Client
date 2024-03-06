@@ -1,7 +1,9 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { client } from "../../utils/client";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 interface IFormData {
   email: string;
@@ -18,10 +20,15 @@ export const Login = () => {
 
   const { mutate } = useMutation({
     mutationFn: async (data: IFormData) => {
-      client.post("/user/login", data);
-    },
-    onSuccess: () => {
-      console.log("login 성공");
+      client
+        .post("/user/login", data)
+        .then((res) => {
+          console.log(res);
+          alert("로그인 성공");
+        })
+        .catch(() => {
+          alert("잘못된 비밀번호");
+        });
     },
   });
 
@@ -70,7 +77,19 @@ export const Login = () => {
         >
           보내기
         </Button>
+        <Box display="flex" justifyContent="end" width="100%">
+          <RegisterLink to="/register">회원가입</RegisterLink>
+        </Box>
       </Stack>
     </>
   );
 };
+
+const RegisterLink = styled(Link)`
+  color: #aaa;
+  transition: all.15s;
+  &:hover {
+    color: #333;
+    text-decoration: underline;
+  }
+`;
