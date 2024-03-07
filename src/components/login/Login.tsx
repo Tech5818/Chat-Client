@@ -2,7 +2,7 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { client } from "../../utils/client";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 interface IFormData {
@@ -11,6 +11,7 @@ interface IFormData {
 }
 
 export const Login = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -24,7 +25,7 @@ export const Login = () => {
         .post("/user/login", data)
         .then((res) => {
           console.log(res);
-          alert("로그인 성공");
+          navigate("/");
         })
         .catch(() => {
           alert("잘못된 비밀번호");
