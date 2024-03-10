@@ -5,8 +5,16 @@ import { ChatPage } from "./page/ChatPage";
 import { LoginPage } from "./page/LoginPage";
 import styled from "styled-components";
 import { RegisterPage } from "./page/RegisterPage";
+import { useToken } from "./store/token";
+import { useEffect } from "react";
 
 function App() {
+  const { token, setToken } = useToken();
+
+  const localToken = localStorage.getItem("token");
+  useEffect(() => {
+    setToken(localToken!);
+  }, [setToken, token, localToken]);
   return (
     <>
       <Container>

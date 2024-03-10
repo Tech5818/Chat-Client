@@ -4,6 +4,7 @@ import { client } from "../../utils/client";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useToken } from "../../store/token";
 
 interface IFormData {
   email: string;
@@ -11,6 +12,7 @@ interface IFormData {
 }
 
 export const Login = () => {
+  const { setToken } = useToken();
   const navigate = useNavigate();
   const {
     register,
@@ -24,7 +26,9 @@ export const Login = () => {
       client
         .post("/user/login", data)
         .then((res) => {
-          console.log(res);
+          const token = res.data.token;
+          localStorage.setItem("token", token);
+          setToken(token);
           navigate("/");
         })
         .catch(() => {
