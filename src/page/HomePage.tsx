@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { client } from "../utils/client";
 import { Room } from "../components/room/Room";
 import { useUser } from "../store/user";
+import { UserInfoBox } from "../components/user/UserInfoBox";
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -26,12 +27,14 @@ export const HomePage = () => {
         });
       return true;
     },
-    enabled: !!token,
   });
   return (
     <>
       <Container>
-        <Room user={user} />
+        <List>
+          <UserInfoBox user={user} />
+          <Room />
+        </List>
       </Container>
     </>
   );
@@ -40,4 +43,14 @@ export const HomePage = () => {
 const Container = styled.div`
   display: flex;
   justify-content: center;
+`;
+
+const List = styled.div`
+  display: flex;
+  flex-flow: column;
+  width: 1100px;
+  height: 100vh;
+  padding: 50px;
+  box-shadow: 0px 0px 20px -8px rgba(0, 0, 0, 0.4);
+  gap: 20px;
 `;
