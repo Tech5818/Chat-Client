@@ -1,13 +1,33 @@
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Socket, io } from "socket.io-client";
 import styled from "styled-components";
+import { client } from "../utils/client";
 
 const endpoint = "http://localhost:8000";
 export const ChatPage = () => {
+  const [roomId, setRoomId] = useState("");
+  const navigate = useNavigate();
   const [socket, setSocket] = useState<Socket | null>(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
-
+  const [searchParams] = useSearchParams();
+  useQuery({
+    queryKey: ["chat-room"],
+    queryFn: () => {
+      client
+        .get(`/room/get?id=${searchParams.get("id")}`)
+        .then((res) => {
+          console.log(res.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          navigate("/");
+        });
+      return true;
+    },
+  });
   useEffect(() => {
     const socket = io(endpoint);
     setSocket(socket);
