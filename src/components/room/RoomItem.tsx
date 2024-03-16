@@ -1,8 +1,12 @@
 import styled from "styled-components";
 import { IRoom } from "../../types/Room";
+import { useNavigate } from "react-router-dom";
 
 export const RoomItem = ({ data }: { data: IRoom }) => {
-  const handleClick = () => {};
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/chat?id=${data.id}`);
+  };
   return (
     <>
       <Container onClick={handleClick}>
