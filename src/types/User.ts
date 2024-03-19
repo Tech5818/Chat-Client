@@ -1,5 +1,7 @@
 export interface IUsers {
   id: number;
-  usersEmail: string;
+  username: string;
+  email: string;
   roomId: number;
+  createAt?: Date;
 }
