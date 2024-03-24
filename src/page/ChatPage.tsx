@@ -5,7 +5,7 @@ import { Socket, io } from "socket.io-client";
 import styled from "styled-components";
 import { client } from "../utils/client";
 import { UserList } from "../components/chat/UserList";
-import { IUsers } from "../types/User";
+import { IRoomUser } from "../types/User";
 
 const endpoint = "http://localhost:8000";
 export const ChatPage = () => {
@@ -26,7 +26,7 @@ export const ChatPage = () => {
         });
       console.log(response!.data.data.users);
 
-      return response!.data.data.users as IUsers[];
+      return response!.data.data.users as IRoomUser[];
     },
     refetchOnWindowFocus: false,
   });

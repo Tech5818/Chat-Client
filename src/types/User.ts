@@ -5,3 +5,9 @@ export interface IUsers {
   roomId: number;
   createAt?: Date;
 }
+
+export interface IRoomUser {
+  id: number;
+  userEmail: string;
+  roomId: number;
+}
