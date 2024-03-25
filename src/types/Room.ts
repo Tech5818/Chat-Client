@@ -6,4 +6,5 @@ export interface IRoom {
     userEmail: string;
     roomId: number;
   }[];
+  messages?: string[];
 }

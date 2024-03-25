@@ -1,20 +1,37 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { Header } from "./components/header/Header";
 import { HomePage } from "./page/HomePage";
 import { ChatPage } from "./page/ChatPage";
 import { LoginPage } from "./page/LoginPage";
 import styled from "styled-components";
 import { RegisterPage } from "./page/RegisterPage";
-import { useToken } from "./store/token";
-import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { client } from "./utils/client";
+import { useUser } from "./store/user";
 
 function App() {
-  const { token, setToken } = useToken();
-
-  const localToken = localStorage.getItem("token");
-  useEffect(() => {
-    setToken(localToken!);
-  }, [setToken, token, localToken]);
+  const { setUser } = useUser();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  useQuery({
+    queryKey: ["token-verify"],
+    queryFn: () => {
+      client
+        .post(
+          "/jwt/verify",
+          {},
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then((res) => {
+          setUser!(res.data.data);
+        })
+        .catch(() => {
+          navigate("/login");
+        });
+      return true;
+    },
+    refetchOnWindowFocus: false,
+  });
   return (
     <>
       <Container>
