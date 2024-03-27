@@ -1,10 +1,51 @@
 import styled from "styled-components";
+import { useSocket } from "../../store/socket";
+import { useForm } from "react-hook-form";
+import { useUser } from "../../store/user";
+import { useSearchParams } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { client } from "../../utils/client";
+import { IMessage, useMessages } from "../../store/message";
 
 export const MainInput = () => {
+  const { register, handleSubmit, reset } = useForm<{ message: string }>();
+  const [searchParams] = useSearchParams();
+  const { socket } = useSocket();
+  const { user } = useUser();
+  const { messages, setMessages } = useMessages();
+
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      const response = await client.get("/message/getRecentMessage");
+      setMessages([...messages, response.data.data as IMessage]);
+    },
+  });
+
+  const sendMessage = handleSubmit(async (data) => {
+    if (data.message.trim() !== "" && socket) {
+      socket.emit(
+        "message",
+        {
+          email: user.email,
+          roomId: parseInt(searchParams.get("id")!),
+          message: data.message,
+        },
+        (err: unknown, value: boolean) => {
+          if (!value) {
+            mutate();
+          } else {
+            console.log(err);
+          }
+        }
+      );
+      reset();
+    }
+  });
+
   return (
     <>
-      <Container>
-        <Input placeholder="메세지를 입력하세요." />
+      <Container onSubmit={sendMessage}>
+        <Input placeholder="메세지를 입력하세요." {...register("message")} />
         <Button>보내기</Button>
       </Container>
     </>
