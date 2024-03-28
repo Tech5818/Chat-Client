@@ -1,11 +1,15 @@
 import styled from "styled-components";
 import { IRoomUser, IUsers } from "../../types/User";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { client } from "../../utils/client";
-import { Box, Skeleton, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box, Button, Skeleton, Typography } from "@mui/material";
+import { useUser } from "../../store/user";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export const UserList = ({ users }: { users?: IRoomUser[] }) => {
+  const navigate = useNavigate();
+  const [serchParams] = useSearchParams();
+  const { user } = useUser();
   const { data } = useQuery<IUsers[]>({
     queryKey: ["chat-user-data"],
     queryFn: async () => {
@@ -21,6 +25,17 @@ export const UserList = ({ users }: { users?: IRoomUser[] }) => {
     enabled: !!users,
     refetchOnWindowFocus: false,
   });
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      client.delete(`/room/delete?id=${serchParams.get("id")}`);
+    },
+  });
+  const handleToHome = () => {
+    navigate("/");
+  };
+  const handleDeleteRoom = () => {
+    mutate();
+  };
   return (
     <>
       <Container>
@@ -38,13 +53,32 @@ export const UserList = ({ users }: { users?: IRoomUser[] }) => {
             </Typography>
             <Box display="flex" flexDirection="column" gap="10px" flex={1}>
               {data &&
-                data!.map((value, idx) => (
-                  <UserBox key={idx}>{value.username}</UserBox>
-                ))}
+                data!.map((value, idx) =>
+                  value.email === user.email ? (
+                    <UserBox key={idx}>
+                      <UserBoxText $fontSize={20} $isBold>
+                        {value.username}
+                      </UserBoxText>
+                    </UserBox>
+                  ) : (
+                    <UserBox key={idx}>
+                      <UserBoxText $fontSize={20}>{value.username}</UserBoxText>
+                    </UserBox>
+                  )
+                )}
+              <Button
+                fullWidth
+                size="large"
+                color="error"
+                variant="contained"
+                onClick={handleDeleteRoom}
+              >
+                방 삭제하기
+              </Button>
             </Box>
-            <Box fontSize={24} display="flex" justifyContent="flex-end">
-              <Link to="/">홈 바로가기</Link>
-            </Box>
+            <Button fullWidth size="large" onClick={handleToHome}>
+              홈 바로가기
+            </Button>
           </>
         )}
       </Container>
@@ -64,6 +98,14 @@ const UserBox = styled.div`
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+`;
+
+const UserBoxText = styled.span<{ $fontSize?: number; $isBold?: boolean }>`
+  font-size: ${({ $fontSize }) => $fontSize}px;
+  font-weight: ${({ $isBold }) => ($isBold ? "bold" : "normal")};
 `;
 
 const SkeletonElement = styled(Skeleton)`

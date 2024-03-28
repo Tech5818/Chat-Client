@@ -27,9 +27,12 @@ export const MainChat = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     scrollRef!.current!.scrollIntoView();
-
+  }, [messages.length]);
+  useEffect(() => {
     socket &&
       socket.on("message", (data: IMessage) => {
+        console.log(data);
+
         setMessages([...messages, data]);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,5 +56,5 @@ const Container = styled.div`
   display: flex;
   flex-flow: column;
   gap: 8px;
-  padding: 5px 20px;
+  padding: 10px;
 `;

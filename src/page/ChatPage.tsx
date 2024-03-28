@@ -31,7 +31,7 @@ export const ChatPage = () => {
   });
   useEffect(() => {
     const socketIO = io(endpoint);
-    socketIO.emit("join", { roomId: "4" });
+    socketIO.emit("join", { roomId: searchParams.get("id") });
     setSocket?.(socketIO);
 
     return () => {

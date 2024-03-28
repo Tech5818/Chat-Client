@@ -1,18 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import styled from "styled-components";
 import { client } from "../../utils/client";
 import { IRoom } from "../../types/Room";
 import { RoomItem } from "./RoomItem";
+import { CreateRoom } from "./CreateRoom";
+import { useEffect } from "react";
+import { useModal } from "../../store/modal";
 
 export const Room = () => {
-  const { data } = useQuery<IRoom[]>({
-    queryKey: ["rooms"],
-    queryFn: async () => {
+  const { isOpen } = useModal();
+  const { mutate, data } = useMutation({
+    mutationFn: async () => {
       const response = await client.get("/room/getAll");
-      return response.data.data;
+      return response.data.data as IRoom[];
     },
   });
-
+  useEffect(() => {
+    mutate();
+  }, [isOpen, mutate]);
   return (
     <>
       <Container>
@@ -21,6 +26,7 @@ export const Room = () => {
         ) : (
           <></>
         )}
+        <CreateRoom />
       </Container>
     </>
   );
