@@ -21,8 +21,6 @@ export const CreateRoom = () => {
     },
   });
   const ModalHandler = () => {
-    console.log(isOpen);
-
     setIsOpen(!isOpen);
     reset();
   };
@@ -58,6 +56,7 @@ export const CreateRoom = () => {
                   variant="contained"
                   size="large"
                   disabled={watch("title") ? false : true}
+                  type="submit"
                 >
                   만들기
                 </Button>

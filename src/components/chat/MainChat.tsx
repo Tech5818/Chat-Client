@@ -35,8 +35,7 @@ export const MainChat = () => {
 
         setMessages([...messages, data]);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [messages, setMessages, socket]);
   return (
     <>
       <Container>

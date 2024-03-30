@@ -23,22 +23,18 @@ export const MainInput = () => {
 
   const sendMessage = handleSubmit(async (data) => {
     if (data.message.trim() !== "" && socket) {
-      socket.emit(
-        "message",
-        {
+      const socketTry = new Promise((resolve) => {
+        socket.emit("message", {
           email: user.email,
           roomId: parseInt(searchParams.get("id")!),
           message: data.message,
-        },
-        (err: unknown, value: boolean) => {
-          if (!value) {
-            mutate();
-          } else {
-            console.log(err);
-          }
-        }
-      );
-      reset();
+        });
+        resolve(true);
+      });
+      socketTry.then(() => {
+        reset();
+        mutate();
+      });
     }
   });
 
