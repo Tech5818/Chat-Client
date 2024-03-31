@@ -16,8 +16,11 @@ export const CreateRoom = () => {
   const { user } = useUser();
   const { mutate } = useMutation({
     mutationFn: async (data: IRoomData) => {
-      client.post("/room/create", { name: data.title, email: user.email });
-      setIsOpen(false);
+      client
+        .post("/room/create", { name: data.title, email: user.email })
+        .then(() => {
+          setIsOpen(!isOpen);
+        });
     },
   });
   const ModalHandler = () => {
@@ -29,7 +32,7 @@ export const CreateRoom = () => {
   });
   return (
     <>
-      <Container onClick={ModalHandler}>+ 방 만들기</Container>
+      <CreateButton onClick={ModalHandler}>+ 방 생성하기</CreateButton>
       {isOpen && (
         <Modal>
           <ModalContainer>
@@ -68,22 +71,15 @@ export const CreateRoom = () => {
     </>
   );
 };
-
-const Container = styled.div`
-  width: 100%;
-  padding: 20px;
-  border: 1px solid #dcdcdc;
-  border-radius: 14px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const CreateButton = styled.div`
+  font-size: 20px;
   cursor: pointer;
-  transition: 0.2s;
-  font-size: 28px;
-  user-select: none;
+  padding: 8px 16px;
+  color: #bf5af2;
+  border-radius: 5px;
+  transition: 0.25s;
   &:hover {
-    font-weight: bold;
-    background: #ddd;
+    background: rgb(191, 90, 242, 0.1);
   }
 `;
 const Modal = styled.div`

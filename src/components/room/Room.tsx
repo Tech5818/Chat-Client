@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { client } from "../../utils/client";
 import { IRoom } from "../../types/Room";
 import { RoomItem } from "./RoomItem";
-import { CreateRoom } from "./CreateRoom";
 import { useEffect } from "react";
 import { useModal } from "../../store/modal";
 
@@ -26,7 +25,6 @@ export const Room = () => {
         ) : (
           <></>
         )}
-        <CreateRoom />
       </Container>
     </>
   );
@@ -37,9 +35,21 @@ const Container = styled.div`
   height: calc(100% - 149px);
   border-radius: 14px;
   border: 1px solid #dcdcdc;
-  overflow-y: scroll;
+  overflow-y: overlay;
   padding: 30px;
   display: flex;
   flex-flow: column;
   gap: 30px;
+  &::-webkit-scrollbar {
+    width: 18px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+  }
+  &::-webkit-scrollbar-thumb {
+    outline: none;
+    border-radius: 10px;
+    border: 6px solid transparent;
+    box-shadow: inset 6px 6px 0 rgba(191, 90, 242, 0.5);
+  }
 `;
