@@ -8,7 +8,10 @@ export const Main = ({ room }: { room: IRoom }) => {
   return (
     <>
       <Container>
-        <MainHeader name={room && room.name} />
+        <MainHeader
+          title={room && room.name}
+          description={room && room.description}
+        />
         <MainChat />
         <MainInput />
       </Container>

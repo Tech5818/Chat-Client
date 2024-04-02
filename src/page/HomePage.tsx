@@ -29,7 +29,7 @@ const List = styled.div`
   flex-flow: column;
   width: 1100px;
   height: 100vh;
-  padding: 50px;
+  padding: 30px 50px;
   box-shadow: 0px 0px 20px -8px rgba(0, 0, 0, 0.4);
   gap: 10px;
 `;

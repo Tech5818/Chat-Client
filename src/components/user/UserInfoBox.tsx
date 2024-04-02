@@ -3,9 +3,10 @@ import { IUser } from "../../store/user";
 import { useQuery } from "@tanstack/react-query";
 import { client } from "../../utils/client";
 import { Box, Skeleton, Typography } from "@mui/material";
+import { LogOutButton } from "./LogOutButton";
 
 export const UserInfoBox = ({ user }: IUser) => {
-  const { data, isPending } = useQuery({
+  const { data } = useQuery({
     queryKey: ["userDatas"],
     queryFn: async () => {
       const response = await client.get(`/user/get?email=${user.email}`);
@@ -13,21 +14,21 @@ export const UserInfoBox = ({ user }: IUser) => {
     },
     enabled: !!user.email,
   });
-
   return (
     <>
       <Box display="flex" flexDirection="column" gap="10px">
         <Typography fontSize="30px" fontWeight="bold">
           프로필
         </Typography>
-        {!isPending ? (
-          <Profile>
-            <Box display="flex" gap="30px">
-              <Text>{data.id}</Text>
+        {data ? (
+          <>
+            <Profile>
               <Text>{data.username}</Text>
-            </Box>
-            <Text>{data.email}</Text>
-          </Profile>
+              <Box flex={1} />
+              <Text>{data.email}</Text>
+            </Profile>
+            <LogOutButton />
+          </>
         ) : (
           <SkeletonElement height={94} />
         )}
@@ -43,6 +44,8 @@ const Profile = styled.div`
   border-radius: 14px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 `;
 
 const Text = styled.span`

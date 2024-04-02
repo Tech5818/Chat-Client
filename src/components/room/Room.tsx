@@ -5,18 +5,21 @@ import { IRoom } from "../../types/Room";
 import { RoomItem } from "./RoomItem";
 import { useEffect } from "react";
 import { useModal } from "../../store/modal";
+import { useReload } from "../../store/reload";
 
 export const Room = () => {
   const { isOpen } = useModal();
+  const { reload } = useReload();
   const { mutate, data } = useMutation({
     mutationFn: async () => {
       const response = await client.get("/room/getAll");
+
       return response.data.data as IRoom[];
     },
   });
   useEffect(() => {
     mutate();
-  }, [isOpen, mutate]);
+  }, [isOpen, mutate, reload]);
   return (
     <>
       <Container>
@@ -39,7 +42,6 @@ const Container = styled.div`
   padding: 30px;
   display: flex;
   flex-flow: column;
-  gap: 30px;
   &::-webkit-scrollbar {
     width: 18px;
   }

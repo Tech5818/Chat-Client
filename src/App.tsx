@@ -16,18 +16,19 @@ function App() {
   useQuery({
     queryKey: ["token-verify"],
     queryFn: () => {
-      client
-        .post(
-          "/jwt/verify",
-          {},
-          { headers: { Authorization: `Bearer ${token}` } }
-        )
-        .then((res) => {
-          setUser!(res.data.data);
-        })
-        .catch(() => {
-          navigate("/login");
-        });
+      if (token)
+        client
+          .post(
+            "/jwt/verify",
+            {},
+            { headers: { Authorization: `Bearer ${token}` } }
+          )
+          .then((res) => {
+            setUser!(res.data.data);
+          })
+          .catch(() => {
+            navigate("/login");
+          });
       return true;
     },
     refetchOnWindowFocus: false,

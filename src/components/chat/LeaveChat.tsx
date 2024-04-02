@@ -16,18 +16,19 @@ export const LeaveChat = () => {
       if (IsIn.data.data.length - 1 == 0) {
         await client.delete(`/room/delete?id=${searchParams.get("id")}`);
         alert("방에 인원이 없어 방이 삭제 되었습니다.");
+        navigate("/");
       } else {
         await client.patch("/room/leave", {
           roomId: parseInt(searchParams.get("id")!),
           email: user.email,
         });
         alert("성공적으로 방을 탈퇴하였습니다.");
+        navigate("/");
       }
     },
   });
   const handleDeleteRoom = () => {
     mutate();
-    navigate("/");
   };
   return (
     <>

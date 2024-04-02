@@ -8,6 +8,7 @@ import { useModal } from "../../store/modal";
 
 interface IRoomData {
   title: string;
+  description: string;
 }
 
 export const CreateRoom = () => {
@@ -17,7 +18,11 @@ export const CreateRoom = () => {
   const { mutate } = useMutation({
     mutationFn: async (data: IRoomData) => {
       client
-        .post("/room/create", { name: data.title, email: user.email })
+        .post("/room/create", {
+          name: data.title,
+          description: data.description,
+          email: user.email,
+        })
         .then(() => {
           setIsOpen(!isOpen);
         });
@@ -34,8 +39,16 @@ export const CreateRoom = () => {
     <>
       <CreateButton onClick={ModalHandler}>+ 방 생성하기</CreateButton>
       {isOpen && (
-        <Modal>
-          <ModalContainer>
+        <Modal
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+        >
+          <ModalContainer
+            onClick={(e: React.MouseEvent) => {
+              e.stopPropagation();
+            }}
+          >
             <ModalHeader>방 정보</ModalHeader>
             <ModalContent onSubmit={handleCreateRoom}>
               <TextField
@@ -44,6 +57,12 @@ export const CreateRoom = () => {
                 label="방 이름"
                 placeholder="방 이름을 입력해주세요"
                 autoFocus
+              />
+              <TextField
+                fullWidth
+                {...register("description")}
+                label="방 설명"
+                placeholder="방 설명을 입력해 주세요"
               />
               <Box display={"flex"} justifyContent={"flex-end"} gap={"10px"}>
                 <Button
@@ -58,7 +77,9 @@ export const CreateRoom = () => {
                   color="primary"
                   variant="contained"
                   size="large"
-                  disabled={watch("title") ? false : true}
+                  disabled={
+                    watch("title") && watch("description") ? false : true
+                  }
                   type="submit"
                 >
                   만들기
